@@ -11,7 +11,7 @@ def read(file):
     #Normalize
     img = img/255
     #Map to 1 or 0
-    img[img != 1] = 0
+    #img[img != 1] = 0
 
     return np.array(img)
 

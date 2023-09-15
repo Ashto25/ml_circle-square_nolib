@@ -94,22 +94,24 @@ def predict_layer(input, actual, train):
     return 0
 
 
-epochs = 30
-runs_per = 500
+epochs = 50
+runs_per = len(eval_data)-1#60
+
+def eval():
+    sum=0
+    for x in range(len(eval_data)):
+        result = predict_layer(eval_data[x], eval_labels[x], False)
+        sum+=result
+
+    print(f"  Final EVAL: {sum/(len(eval_data))}")
 
 for e in range(epochs):
     sum=0
     for i in range(runs_per):
-        x = random.randint(0,len(train_data)-1)
+        x = i#random.randint(0,len(train_data)-1)
         result = predict_layer(train_data[x], train_labels[x], True)
         sum+=result
-    print(f"Final out is: {sum/(runs_per)}")
+    print(f"Final out is: {sum/(runs_per)}", end='')
+    eval()
 
-sum=0
 
-
-for x in range(len(eval_data)):
-    result = predict_layer(eval_data[x], eval_labels[x], False)
-    sum+=result
-
-print(f"Final out is: {sum/(len(eval_data))}")
