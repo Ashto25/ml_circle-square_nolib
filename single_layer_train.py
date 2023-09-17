@@ -3,6 +3,7 @@ import load_data
 import read_image
 import math
 import random
+import matplotlib.pyplot as plt
 
 #28 by 28 pixel images, black and white (0,1)
 #Data is pre-processed by retrieve_data()
@@ -64,7 +65,8 @@ def predict_layer(input, actual, train):
 
     output = forward_passout[0]
 
-    loss_output = (binary_cross_entropy_loss(output, actual))
+
+    #loss_output = (binary_cross_entropy_loss(output, actual))
     #print(f"Loss: {loss_output}, Actual: {actual}, Prediction: {output}")
 
     if train:
@@ -98,12 +100,27 @@ epochs = 50
 runs_per = len(eval_data)-1#60
 
 def eval():
+    evals = []
     sum=0
     for x in range(len(eval_data)):
         result = predict_layer(eval_data[x], eval_labels[x], False)
         sum+=result
-
+        evals.append((x, result))
     print(f"  Final EVAL: {sum/(len(eval_data))}")
+
+    offset=5
+    fig, sp = plt.subplots(1, 6)
+    for x in range(6):
+        sp[x].imshow( np.reshape( eval_data[evals[x+offset][0]], (28,28) ), vmin=0, vmax=1 )
+        if evals[x+offset][1]:
+            sp[x].set_title("Correct")
+        else:
+            sp[x].set_title("Wrong")
+        sp[x].set_axis_off()
+    #plt.imshow(np.reshape(layerout_weights, (28,28)), vmin=0, vmax=1)
+    plt.show()
+
+
 
 for e in range(epochs):
     sum=0
@@ -111,7 +128,13 @@ for e in range(epochs):
         x = i#random.randint(0,len(train_data)-1)
         result = predict_layer(train_data[x], train_labels[x], True)
         sum+=result
-    print(f"Final out is: {sum/(runs_per)}", end='')
-    eval()
+    #print(f"Final out is: {sum/(runs_per)}", end='')
+    #eval()
+
+eval()
+
+plt.imshow(np.reshape(layerout_weights, (28,28)), vmin=0, vmax=1)
+plt.axis('off')  # Turn off axis labels and ticks
+plt.show()
 
 
