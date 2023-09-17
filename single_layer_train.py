@@ -22,39 +22,19 @@ eval_labels = labels[train_splt:]
 learning_rate = 0.01
 #Model architecture:
 #    Input layer - single dimension layer with 784 nodes
-#    Hidden layer 1 - fully connected layer with 200 nodes
-#    Output layer - 2 node output layer mapping to either circle, or square
-
-
+#    Output layer - 1 node output layer mapping to either circle, or square
 
 output_size = 1
 biasout = []
 layerout_weights = []
+
 for x in range(output_size):
     layerout_weights.append(np.random.rand(input_datasize) * 0.2 - 0.1)
     biasout.append(random.randint(0,1))
 
 
-def binary_cross_entropy_loss(predictions, targets):
-    epsilon = 1e-15  # A small constant to avoid taking the log of zero
-    y_pred = np.clip(predictions, epsilon, 1 - epsilon)  # Clip values to avoid extreme cases
-    loss = - (targets * np.log(y_pred) + (1 - targets) * np.log(1 - y_pred))
-    #loss = -[y * log(p) + (1 - y) * log(1 - p)]
-    return loss
-
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
-
-def softmax(logits):
-    # Subtract the maximum logit value for numerical stability
-    exp_logits = np.exp(logits - np.max(logits))
-    sum_exp_logits = np.sum(exp_logits)
-    softmax_probs = exp_logits / sum_exp_logits
-    return softmax_probs
-
-def logit(p):
-    return np.log(p / (1 - p))
-
 
 def predict_layer(input, actual, train):
 
